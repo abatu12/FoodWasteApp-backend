@@ -1,18 +1,11 @@
-package com.example.foodwasteapp.dbmodel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+package com.example.foodwasteapp.dto;
 
-@Entity
-public class user {
-    @Id
+public class userDto {
     private Long id;
     private String username;
     private String email;
-    private String password;
     private String role;
-    private String  location;
+    private String location;
 
     public Long getId() {
         return id;
@@ -33,13 +26,6 @@ public class user {
     }
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getRole() {
