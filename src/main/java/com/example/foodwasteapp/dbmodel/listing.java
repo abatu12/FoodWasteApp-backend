@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 public class listing {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String  description;
@@ -18,6 +19,7 @@ public class listing {
     private LocalDateTime createdAt;
     private String image;
     private  Long userID;
+
     public Long getId() {
         return id;
     }

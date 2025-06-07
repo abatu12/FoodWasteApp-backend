@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 public class recipe {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userID;
     private String title;

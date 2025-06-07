@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 public class claim {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long requesterID;
     private Long listingID;

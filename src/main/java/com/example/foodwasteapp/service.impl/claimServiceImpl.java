@@ -3,14 +3,14 @@ package com.example.foodwasteapp.service.impl;
 import com.example.foodwasteapp.dbmodel.claim;
 import com.example.foodwasteapp.dto.claimDto;
 import com.example.foodwasteapp.repository.claimRepository;
-import com.example.foodwasteapp.service.claimService;
+import com.example.foodwasteapp.service.ClaimService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class claimServiceImpl implements claimService {
+public class claimServiceImpl implements ClaimService {
 
     private final claimRepository claimRepo;
 

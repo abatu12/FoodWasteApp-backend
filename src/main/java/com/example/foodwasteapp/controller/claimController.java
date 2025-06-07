@@ -1,42 +1,45 @@
 package com.example.foodwasteapp.controller;
 
+import com.example.foodwasteapp.dto.claimDto;
 import com.example.foodwasteapp.service.ClaimService;
-import com.example.foodwasteapp.dto.ClaimDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController               /
+@RestController
 @RequestMapping("/claims")
-public class ClaimController {
+public class claimController {
 
-    @Autowired
-    private ClaimService claimService;
+    private final ClaimService claimService;
+
+
+    public claimController(ClaimService claimService) {
+        this.claimService = claimService;
+    }
 
 
     @GetMapping
-    public List<ClaimDto> getAllClaims() {
-        return claimService.findAll();
+    public List<claimDto> getAllClaims() {
+        return claimService.getAll();
     }
 
 
     @GetMapping("/{id}")
-    public ClaimDto getClaimById(@PathVariable Long id) {
-        return claimService.findById(id);
+    public claimDto getClaimById(@PathVariable Long id) {
+        return claimService.getById(id);
     }
 
 
     @PostMapping
-    public ClaimDto createClaim(@RequestBody ClaimDto dto) {
+    public claimDto createClaim(@RequestBody claimDto dto) {
         return claimService.create(dto);
     }
 
 
     @PutMapping("/{id}")
-    public ClaimDto updateClaim(
+    public claimDto updateClaim(
             @PathVariable Long id,
-            @RequestBody ClaimDto dto
+            @RequestBody claimDto dto
     ) {
         return claimService.update(id, dto);
     }
@@ -44,6 +47,6 @@ public class ClaimController {
 
     @DeleteMapping("/{id}")
     public void deleteClaim(@PathVariable Long id) {
-        claimService.deleteById(id);
+        claimService.delete(id);
     }
 }

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 public class message {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long senderID;
     private Long receiverID;

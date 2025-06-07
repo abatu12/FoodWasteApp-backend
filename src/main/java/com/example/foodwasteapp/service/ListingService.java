@@ -2,7 +2,7 @@ package com.example.foodwasteapp.service;
 import com.example.foodwasteapp.dto.listingDto;
 import java.util.List;
 
-public interface listingService {
+public interface ListingService {
     List<listingDto> getAll();
     listingDto getById(Long id);
     listingDto create(listingDto dto);

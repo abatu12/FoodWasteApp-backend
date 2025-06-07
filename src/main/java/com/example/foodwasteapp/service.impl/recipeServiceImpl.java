@@ -3,13 +3,13 @@ package com.example.foodwasteapp.service.impl;
 import com.example.foodwasteapp.dbmodel.recipe;
 import com.example.foodwasteapp.dto.recipeDto;
 import com.example.foodwasteapp.repository.recipeRepository;
-import com.example.foodwasteapp.service.recipeService;
+import com.example.foodwasteapp.service.RecipeService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class recipeServiceImpl implements recipeService {
+public class recipeServiceImpl implements RecipeService {
 
     private final recipeRepository recipeRepo;
 

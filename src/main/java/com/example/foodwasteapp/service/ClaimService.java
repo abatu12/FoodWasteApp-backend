@@ -3,7 +3,7 @@ import com.example.foodwasteapp.dto.claimDto;
 
 import java.util.List;
 
-public interface claimService {
+public interface ClaimService {
     List<claimDto> getAll();
     claimDto getById(Long id);
     claimDto create(claimDto dto);
