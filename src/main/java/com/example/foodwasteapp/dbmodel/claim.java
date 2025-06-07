@@ -15,6 +15,5 @@ public class claim {
     private String status;
     private LocalDateTime requestedAt;
 
-
 }
 
