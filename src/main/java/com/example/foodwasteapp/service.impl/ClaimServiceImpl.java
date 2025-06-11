@@ -1,8 +1,8 @@
 package com.example.foodwasteapp.service.impl;
 
-import com.example.foodwasteapp.dbmodel.claim;
-import com.example.foodwasteapp.dto.claimDto;
-import com.example.foodwasteapp.repository.claimRepository;
+import com.example.foodwasteapp.dbmodel.Claim;
+import com.example.foodwasteapp.dto.ClaimDto;
+import com.example.foodwasteapp.repository.ClaimRepository;
 import com.example.foodwasteapp.service.ClaimService;
 import org.springframework.stereotype.Service;
 
@@ -10,44 +10,44 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class claimServiceImpl implements ClaimService {
+public class ClaimServiceImpl implements ClaimService {
 
-    private final claimRepository claimRepo;
+    private final ClaimRepository claimRepo;
 
-    public claimServiceImpl(claimRepository claimRepo) {
+    public ClaimServiceImpl(ClaimRepository claimRepo) {
         this.claimRepo = claimRepo;
     }
 
     @Override
-    public List<claimDto> getAll() {
+    public List<ClaimDto> getAll() {
         return claimRepo.findAll().stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Override
-    public claimDto getById(Long id) {
-        claim c = claimRepo.findById(id)
+    public ClaimDto getById(Long id) {
+        Claim c = claimRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Claim not found"));
         return toDto(c);
     }
 
     @Override
-    public claimDto create(claimDto dto) {
-        claim entity = toEntity(dto);
-        claim saved = claimRepo.save(entity);
+    public ClaimDto create(ClaimDto dto) {
+        Claim entity = toEntity(dto);
+        Claim saved = claimRepo.save(entity);
         return toDto(saved);
     }
 
     @Override
-    public claimDto update(Long id, claimDto dto) {
-        claim existing = claimRepo.findById(id)
+    public ClaimDto update(Long id, ClaimDto dto) {
+        Claim existing = claimRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Claim not found"));
         existing.setRequesterID(dto.getRequesterID());
         existing.setListingID(dto.getListingID());
         existing.setStatus(dto.getStatus());
         existing.setRequestedAt(dto.getRequestedAt());
-        claim updated = claimRepo.save(existing);
+        Claim updated = claimRepo.save(existing);
         return toDto(updated);
     }
 
@@ -56,8 +56,8 @@ public class claimServiceImpl implements ClaimService {
         claimRepo.deleteById(id);
     }
 
-    private claimDto toDto(claim c) {
-        claimDto dto = new claimDto();
+    private ClaimDto toDto(Claim c) {
+        ClaimDto dto = new ClaimDto();
         dto.setId(c.getId());
         dto.setRequesterID(c.getRequesterID());
         dto.setListingID(c.getListingID());
@@ -66,8 +66,8 @@ public class claimServiceImpl implements ClaimService {
         return dto;
     }
 
-    private claim toEntity(claimDto dto) {
-        claim c = new claim();
+    private Claim toEntity(ClaimDto dto) {
+        Claim c = new Claim();
         c.setRequesterID(dto.getRequesterID());
         c.setListingID(dto.getListingID());
         c.setStatus(dto.getStatus());

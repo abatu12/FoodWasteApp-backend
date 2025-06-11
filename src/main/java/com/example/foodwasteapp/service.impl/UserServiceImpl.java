@@ -1,8 +1,8 @@
 package com.example.foodwasteapp.service.impl;
 
-import com.example.foodwasteapp.dbmodel.user;
-import com.example.foodwasteapp.dto.userDto;
-import com.example.foodwasteapp.repository.userRepository;
+import com.example.foodwasteapp.dbmodel.User;
+import com.example.foodwasteapp.dto.UserDto;
+import com.example.foodwasteapp.repository.UserRepository;
 import com.example.foodwasteapp.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -10,44 +10,44 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class userServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
-    private final userRepository userRepo;
+    private final UserRepository userRepo;
 
-    public userServiceImpl(userRepository userRepo) {
+    public UserServiceImpl(UserRepository userRepo) {
         this.userRepo = userRepo;
     }
 
     @Override
-    public List<userDto> getAll() {
+    public List<UserDto> getAll() {
         return userRepo.findAll().stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Override
-    public userDto getById(Long id) {
-        user u = userRepo.findById(id)
+    public UserDto getById(Long id) {
+        User u = userRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
         return toDto(u);
     }
 
     @Override
-    public userDto create(userDto dto) {
-        user entity = toEntity(dto);
-        user saved = userRepo.save(entity);
+    public UserDto create(UserDto dto) {
+        User entity = toEntity(dto);
+        User saved = userRepo.save(entity);
         return toDto(saved);
     }
 
     @Override
-    public userDto update(Long id, userDto dto) {
-        user existing = userRepo.findById(id)
+    public UserDto update(Long id, UserDto dto) {
+        User existing = userRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
         existing.setUsername(dto.getUsername());
         existing.setEmail(dto.getEmail());
         existing.setRole(dto.getRole());
         existing.setLocation(dto.getLocation());
-        user updated = userRepo.save(existing);
+        User updated = userRepo.save(existing);
         return toDto(updated);
     }
 
@@ -56,8 +56,8 @@ public class userServiceImpl implements UserService {
         userRepo.deleteById(id);
     }
 
-    private userDto toDto(user u) {
-        userDto dto = new userDto();
+    private UserDto toDto(User u) {
+        UserDto dto = new UserDto();
         dto.setId(u.getId());
         dto.setUsername(u.getUsername());
         dto.setEmail(u.getEmail());
@@ -66,8 +66,8 @@ public class userServiceImpl implements UserService {
         return dto;
     }
 
-    private user toEntity(userDto dto) {
-        user u = new user();
+    private User toEntity(UserDto dto) {
+        User u = new User();
         u.setUsername(dto.getUsername());
         u.setEmail(dto.getEmail());
         u.setRole(dto.getRole());

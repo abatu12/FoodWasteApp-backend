@@ -1,8 +1,8 @@
 package com.example.foodwasteapp.service.impl;
 
-import com.example.foodwasteapp.dbmodel.message;
-import com.example.foodwasteapp.dto.messageDto;
-import com.example.foodwasteapp.repository.messageRepository;
+import com.example.foodwasteapp.dbmodel.Message;
+import com.example.foodwasteapp.dto.MessageDto;
+import com.example.foodwasteapp.repository.MessageRepository;
 import com.example.foodwasteapp.service.MessageService;
 import org.springframework.stereotype.Service;
 
@@ -10,45 +10,45 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class messageServiceImpl implements MessageService {
+public class MessageServiceImpl implements MessageService {
 
-    private final messageRepository messageRepo;
+    private final MessageRepository messageRepo;
 
-    public messageServiceImpl(messageRepository messageRepo) {
+    public MessageServiceImpl(MessageRepository messageRepo) {
         this.messageRepo = messageRepo;
     }
 
     @Override
-    public List<messageDto> getAll() {
+    public List<MessageDto> getAll() {
         return messageRepo.findAll().stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Override
-    public messageDto getById(Long id) {
-        message m = messageRepo.findById(id)
+    public MessageDto getById(Long id) {
+        Message m = messageRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Message not found"));
         return toDto(m);
     }
 
     @Override
-    public messageDto create(messageDto dto) {
-        message entity = toEntity(dto);
-        message saved = messageRepo.save(entity);
+    public MessageDto create(MessageDto dto) {
+        Message entity = toEntity(dto);
+        Message saved = messageRepo.save(entity);
         return toDto(saved);
     }
 
     @Override
-    public messageDto update(Long id, messageDto dto) {
-        message existing = messageRepo.findById(id)
+    public MessageDto update(Long id, MessageDto dto) {
+        Message existing = messageRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Message not found"));
         existing.setSenderID(dto.getSenderID());
         existing.setReceiverID(dto.getReceiverID());
         existing.setListingID(dto.getListingID());
         existing.setText(dto.getText());
         existing.setTimestamp(dto.getTimestamp());
-        message updated = messageRepo.save(existing);
+        Message updated = messageRepo.save(existing);
         return toDto(updated);
     }
 
@@ -57,8 +57,8 @@ public class messageServiceImpl implements MessageService {
         messageRepo.deleteById(id);
     }
 
-    private messageDto toDto(message m) {
-        messageDto dto = new messageDto();
+    private MessageDto toDto(Message m) {
+        MessageDto dto = new MessageDto();
         dto.setId(m.getId());
         dto.setSenderID(m.getSenderID());
         dto.setReceiverID(m.getReceiverID());
@@ -68,8 +68,8 @@ public class messageServiceImpl implements MessageService {
         return dto;
     }
 
-    private message toEntity(messageDto dto) {
-        message m = new message();
+    private Message toEntity(MessageDto dto) {
+        Message m = new Message();
         m.setSenderID(dto.getSenderID());
         m.setReceiverID(dto.getReceiverID());
         m.setListingID(dto.getListingID());

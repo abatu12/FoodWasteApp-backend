@@ -1,4 +1,6 @@
 package com.example.foodwasteapp.controller;
 
-public class recipeController {
+
+public class ListingController {
+
 }

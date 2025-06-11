@@ -1,11 +1,11 @@
 package com.example.foodwasteapp.service;
-import com.example.foodwasteapp.dto.userDto;
+import com.example.foodwasteapp.dto.UserDto;
 import java.util.List;
 
 public interface UserService {
-    List<userDto> getAll();
-    userDto getById(Long id);
-    userDto create(userDto dto);
-    userDto update(Long id, userDto dto);
+    List<UserDto> getAll();
+    UserDto getById(Long id);
+    UserDto create(UserDto dto);
+    UserDto update(Long id, UserDto dto);
     void delete(Long id);
 }

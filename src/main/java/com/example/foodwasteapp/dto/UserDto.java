@@ -1,6 +1,6 @@
 package com.example.foodwasteapp.dto;
 
-public class userDto {
+public class UserDto {
     private Long id;
     private String username;
     private String email;

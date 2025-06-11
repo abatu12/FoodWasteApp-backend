@@ -1,7 +1,7 @@
 package com.example.foodwasteapp.dto;
 import java.time.LocalDateTime;
 
-public class messageDto {
+public class MessageDto {
     private Long id;
     private Long senderID;
     private Long receiverID;

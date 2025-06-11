@@ -1,24 +1,16 @@
-package com.example.foodwasteapp.dbmodel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
+package com.example.foodwasteapp.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-public class listing {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ListingDto {
     private Long id;
     private String title;
-    private String  description;
+    private String description;
     private Integer quantity;
-    private LocalDate  expiryDate;
+    private LocalDate expiryDate;
     private LocalDateTime createdAt;
     private String image;
-    private  Long userID;
+    private Long userID;
 
     public Long getId() {
         return id;

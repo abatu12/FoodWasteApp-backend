@@ -1,7 +1,15 @@
-package com.example.foodwasteapp.dto;
+package com.example.foodwasteapp.dbmodel;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
 import java.time.LocalDateTime;
 
-public class recipeDto {
+@Entity
+public class Recipe {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userID;
     private String title;
@@ -11,7 +19,7 @@ public class recipeDto {
     private String image;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private boolean enabled;
+    private String enabled;
 
     public Long getId() {
         return id;
@@ -76,10 +84,10 @@ public class recipeDto {
         this.updatedAt = updatedAt;
     }
 
-    public boolean isEnabled() {
+    public String getEnabled() {
         return enabled;
     }
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
     }
 }

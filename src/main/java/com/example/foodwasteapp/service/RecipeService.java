@@ -1,11 +1,11 @@
 package com.example.foodwasteapp.service;
-import com.example.foodwasteapp.dto.recipeDto;
+import com.example.foodwasteapp.dto.RecipeDto;
 import java.util.List;
 
 public interface RecipeService {
-    List<recipeDto> getAll();
-    recipeDto getById(Long id);
-    recipeDto create(recipeDto dto);
-    recipeDto update(Long id, recipeDto dto);
+    List<RecipeDto> getAll();
+    RecipeDto getById(Long id);
+    RecipeDto create(RecipeDto dto);
+    RecipeDto update(Long id, RecipeDto dto);
     void delete(Long id);
 }

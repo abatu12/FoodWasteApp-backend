@@ -1,15 +1,7 @@
-package com.example.foodwasteapp.dbmodel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
+package com.example.foodwasteapp.dto;
 import java.time.LocalDateTime;
 
-@Entity
-public class claim {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ClaimDto {
     private Long id;
     private Long requesterID;
     private Long listingID;

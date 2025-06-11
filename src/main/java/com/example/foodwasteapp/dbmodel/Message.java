@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import java.time.LocalDateTime;
 
 @Entity
-public class message {
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,46 +1,46 @@
 package com.example.foodwasteapp.service.impl;
 
-import com.example.foodwasteapp.dbmodel.recipe;
-import com.example.foodwasteapp.dto.recipeDto;
-import com.example.foodwasteapp.repository.recipeRepository;
+import com.example.foodwasteapp.dbmodel.Recipe;
+import com.example.foodwasteapp.dto.RecipeDto;
+import com.example.foodwasteapp.repository.RecipeRepository;
 import com.example.foodwasteapp.service.RecipeService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class recipeServiceImpl implements RecipeService {
+public class RecipeServiceImpl implements RecipeService {
 
-    private final recipeRepository recipeRepo;
+    private final RecipeRepository recipeRepo;
 
-    public recipeServiceImpl(recipeRepository recipeRepo) {
+    public RecipeServiceImpl(RecipeRepository recipeRepo) {
         this.recipeRepo = recipeRepo;
     }
 
     @Override
-    public List<recipeDto> getAll() {
+    public List<RecipeDto> getAll() {
         return recipeRepo.findAll().stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Override
-    public recipeDto getById(Long id) {
-        recipe r = recipeRepo.findById(id)
+    public RecipeDto getById(Long id) {
+        Recipe r = recipeRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Recipe not found"));
         return toDto(r);
     }
 
     @Override
-    public recipeDto create(recipeDto dto) {
-        recipe entity = toEntity(dto);
-        recipe saved = recipeRepo.save(entity);
+    public RecipeDto create(RecipeDto dto) {
+        Recipe entity = toEntity(dto);
+        Recipe saved = recipeRepo.save(entity);
         return toDto(saved);
     }
 
     @Override
-    public recipeDto update(Long id, recipeDto dto) {
-        recipe existing = recipeRepo.findById(id)
+    public RecipeDto update(Long id, RecipeDto dto) {
+        Recipe existing = recipeRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Recipe not found"));
         existing.setUserID(dto.getUserID());
         existing.setTitle(dto.getTitle());
@@ -51,7 +51,7 @@ public class recipeServiceImpl implements RecipeService {
         existing.setCreatedAt(dto.getCreatedAt());
         existing.setUpdatedAt(dto.getUpdatedAt());
         existing.setEnabled(dto.isEnabled() ? "true" : "false");
-        recipe updated = recipeRepo.save(existing);
+        Recipe updated = recipeRepo.save(existing);
         return toDto(updated);
     }
 
@@ -59,8 +59,8 @@ public class recipeServiceImpl implements RecipeService {
     public void delete(Long id) {
         recipeRepo.deleteById(id);
     }
-    private recipeDto toDto(recipe r) {
-        recipeDto dto = new recipeDto();
+    private RecipeDto toDto(Recipe r) {
+        RecipeDto dto = new RecipeDto();
         dto.setId(r.getId());
         dto.setUserID(r.getUserID());
         dto.setTitle(r.getTitle());
@@ -74,8 +74,8 @@ public class recipeServiceImpl implements RecipeService {
         return dto;
     }
 
-    private recipe toEntity(recipeDto dto) {
-        recipe r = new recipe();
+    private Recipe toEntity(RecipeDto dto) {
+        Recipe r = new Recipe();
         r.setUserID(dto.getUserID());
         r.setTitle(dto.getTitle());
         r.setDescription(dto.getDescription());

@@ -1,46 +1,46 @@
 package com.example.foodwasteapp.service.impl;
 
-import com.example.foodwasteapp.dbmodel.listing;
-import com.example.foodwasteapp.dto.listingDto;
-import com.example.foodwasteapp.repository.listingRepository;
+import com.example.foodwasteapp.dbmodel.Listing;
+import com.example.foodwasteapp.dto.ListingDto;
+import com.example.foodwasteapp.repository.ListingRepository;
 import com.example.foodwasteapp.service.ListingService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class listingServiceImpl implements ListingService {
+public class ListingServiceImpl implements ListingService {
 
-    private final listingRepository listingRepo;
+    private final ListingRepository listingRepo;
 
-    public listingServiceImpl(listingRepository listingRepo) {
+    public ListingServiceImpl(ListingRepository listingRepo) {
         this.listingRepo = listingRepo;
     }
 
     @Override
-    public List<listingDto> getAll() {
+    public List<ListingDto> getAll() {
         return listingRepo.findAll().stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Override
-    public listingDto getById(Long id) {
-        listing l = listingRepo.findById(id)
+    public ListingDto getById(Long id) {
+        Listing l = listingRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Listing not found"));
         return toDto(l);
     }
 
     @Override
-    public listingDto create(listingDto dto) {
-        listing entity = toEntity(dto);
-        listing saved = listingRepo.save(entity);
+    public ListingDto create(ListingDto dto) {
+        Listing entity = toEntity(dto);
+        Listing saved = listingRepo.save(entity);
         return toDto(saved);
     }
 
     @Override
-    public listingDto update(Long id, listingDto dto) {
-        listing existing = listingRepo.findById(id)
+    public ListingDto update(Long id, ListingDto dto) {
+        Listing existing = listingRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Listing not found"));
         existing.setTitle(dto.getTitle());
         existing.setDescription(dto.getDescription());
@@ -49,7 +49,7 @@ public class listingServiceImpl implements ListingService {
         existing.setCreatedAt(dto.getCreatedAt());
         existing.setImage(dto.getImage());
         existing.setUserID(dto.getUserID());
-        listing updated = listingRepo.save(existing);
+        Listing updated = listingRepo.save(existing);
         return toDto(updated);
     }
 
@@ -58,8 +58,8 @@ public class listingServiceImpl implements ListingService {
         listingRepo.deleteById(id);
     }
 
-    private listingDto toDto(listing l) {
-        listingDto dto = new listingDto();
+    private ListingDto toDto(Listing l) {
+        ListingDto dto = new ListingDto();
         dto.setId(l.getId());
         dto.setTitle(l.getTitle());
         dto.setDescription(l.getDescription());
@@ -71,8 +71,8 @@ public class listingServiceImpl implements ListingService {
         return dto;
     }
 
-    private listing toEntity(listingDto dto) {
-        listing l = new listing();
+    private Listing toEntity(ListingDto dto) {
+        Listing l = new Listing();
         l.setTitle(dto.getTitle());
         l.setDescription(dto.getDescription());
         l.setQuantity(dto.getQuantity());
