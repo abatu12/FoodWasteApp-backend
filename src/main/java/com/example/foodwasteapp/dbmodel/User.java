@@ -18,4 +18,7 @@ public class User {
     private String password;
     private String role;
     private String  location;
+
+    public void setEnabled(boolean b) {
+    }
 }

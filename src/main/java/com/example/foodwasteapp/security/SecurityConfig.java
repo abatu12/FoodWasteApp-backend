@@ -25,36 +25,32 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtFilter;
     private final UserDetailsService uds;
 
-    // 1) Poseban chain _samo_ za H2 konzolu, mora imati viši prioritet (manji @Order)
     @Bean
     @Order(1)
     public SecurityFilterChain h2ConsoleSecurity(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/h2-console/**")     // samo za H2 URL-e
-                .csrf(csrf -> csrf.disable())          // isključi CSRF
+                .securityMatcher("/h2-console/**")
+                .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers
-                        .frameOptions(frame -> frame.disable()) // dopusti iframe-ove
+                        .frameOptions(frame -> frame.disable())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()           // sve prođe bez auth
+                        .anyRequest().permitAll()
                 );
         return http.build();
     }
 
-    // 2) Glavni chain za tvoje API-je
+
     @Bean
     @Order(2)
     public SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
         http
-                // CSRF je već ugašen za H2, ali možemo ga isključiti i globalno
                 .csrf(csrf -> csrf.disable())
 
-                // Stateless JWT
                 .sessionManagement(sm ->
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // Autorizacijska pravila
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/user/all").permitAll()
@@ -62,7 +58,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                // DAO provider + JWT filter
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

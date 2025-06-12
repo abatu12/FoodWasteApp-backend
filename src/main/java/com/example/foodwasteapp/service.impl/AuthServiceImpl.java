@@ -1,17 +1,21 @@
 package com.example.foodwasteapp.service.impl;
 
-import com.example.foodwasteapp.dbmodel.*;
+import com.example.foodwasteapp.dbmodel.RefreshToken;
+import com.example.foodwasteapp.dbmodel.User;
 import com.example.foodwasteapp.dto.*;
-import com.example.foodwasteapp.repository.*;
-import com.example.foodwasteapp.service.*;
+import com.example.foodwasteapp.repository.RefreshTokenRepository;
+import com.example.foodwasteapp.repository.UserRepository;
+import com.example.foodwasteapp.service.AuthService;
+import com.example.foodwasteapp.service.impl.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.*;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import java.time.Instant;
 
 @Service
@@ -21,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepo;
     private final RefreshTokenRepository refreshRepo;
     private final JwtService jwt;
-    private final PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public ResponseEntity<AuthResponseDto> login(LoginRequestDto req, HttpServletResponse res) {
@@ -29,54 +33,84 @@ public class AuthServiceImpl implements AuthService {
                 new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword())
         );
         User u = userRepo.findByUsername(req.getUsername())
-                .orElseThrow();
-        String access = jwt.generateAccessToken(u.getUsername(), u.getRole());
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        String access  = jwt.generateAccessToken(u.getUsername(), u.getRole());
         String refresh = jwt.generateRefreshToken(u.getUsername());
-
         RefreshToken rt = new RefreshToken();
         rt.setToken(refresh);
         rt.setUser(u);
-        rt.setExpiryDate(Instant.now().plusMillis(jwt.REFRESH_MS));
+        rt.setExpiryDate(Instant.now().plusMillis(JwtService.REFRESH_MS));
+        refreshRepo.deleteByUser(u);
         refreshRepo.save(rt);
 
-        Cookie c = new Cookie("accessToken", access);
-        c.setHttpOnly(true);
-        c.setPath("/");
-        c.setMaxAge((int)(jwt.ACCESS_MS/1000));
-        res.addCookie(c);
+        Cookie cookie = new Cookie("accessToken", access);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge((int)(JwtService.ACCESS_MS / 1000));
+        res.addCookie(cookie);
 
-        return ResponseEntity.ok(AuthResponseDto.builder()
+        AuthResponseDto body = AuthResponseDto.builder()
+                .accessToken(access)
                 .refreshToken(refresh)
                 .role(u.getRole())
-                .build());
+                .build();
+        return ResponseEntity.ok(body);
     }
 
     @Override
     public ResponseEntity<AuthResponseDto> refreshToken(String token, HttpServletResponse res) {
         RefreshToken rt = refreshRepo.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Invalid token"));
+                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+
         if (rt.getExpiryDate().isBefore(Instant.now())) {
             refreshRepo.delete(rt);
-            throw new RuntimeException("Expired");
+            throw new RuntimeException("Refresh token expired");
         }
-        String user = jwt.getUsername(token);
-        User u = userRepo.findByUsername(user).get();
-        String newAccess = jwt.generateAccessToken(user, u.getRole());
 
-        Cookie c = new Cookie("accessToken", newAccess);
-        c.setHttpOnly(true);
-        c.setPath("/");
-        c.setMaxAge((int)(jwt.ACCESS_MS/1000));
-        res.addCookie(c);
+        String username = jwt.extractUsername(token);
+        User u = userRepo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return ResponseEntity.ok(AuthResponseDto.builder()
+        String newAccess = jwt.generateAccessToken(username, u.getRole());
+
+        Cookie cookie = new Cookie("accessToken", newAccess);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge((int)(JwtService.ACCESS_MS / 1000));
+        res.addCookie(cookie);
+
+        AuthResponseDto body = AuthResponseDto.builder()
+                .accessToken(newAccess)
                 .refreshToken(token)
                 .role(u.getRole())
-                .build());
+                .build();
+        return ResponseEntity.ok(body);
     }
 
     @Override
     public void logout(String token) {
         refreshRepo.findByToken(token).ifPresent(refreshRepo::delete);
+    }
+
+    @Override
+    public ResponseEntity<?> register(RegistrationRequestDto req) {
+        if (userRepo.existsByUsername(req.getUsername()) ||
+                userRepo.existsByEmail(req.getEmail())) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Username or email already in use");
+        }
+
+        User u = new User();
+        u.setUsername(req.getUsername());
+        u.setEmail(req.getEmail());
+        u.setPassword(passwordEncoder.encode(req.getPassword()));
+        u.setRole("USER");
+        u.setEnabled(true);
+        userRepo.save(u);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(u);
     }
 }

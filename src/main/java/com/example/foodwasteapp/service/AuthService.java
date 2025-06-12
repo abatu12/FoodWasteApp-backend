@@ -8,4 +8,6 @@ public interface AuthService {
     ResponseEntity<AuthResponseDto> login(LoginRequestDto req, HttpServletResponse res);
     ResponseEntity<AuthResponseDto> refreshToken(String token, HttpServletResponse res);
     void logout(String token);
+
+    ResponseEntity<?> register(RegistrationRequestDto req);
 }

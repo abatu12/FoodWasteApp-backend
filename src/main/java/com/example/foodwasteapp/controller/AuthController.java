@@ -37,4 +37,11 @@ public class AuthController {
         authService.logout(req.getRefreshToken());
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @Valid @RequestBody RegistrationRequestDto req
+    ){
+        return authService.register(req);
+    }
 }
