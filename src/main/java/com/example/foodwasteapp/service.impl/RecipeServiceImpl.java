@@ -19,10 +19,15 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<RecipeDto> getAll() {
-        return recipeRepo.findAll().stream()
+        List<Recipe> recipes = recipeRepo.findAll();
+        System.out.println(">>> Ukupno pronađenih recepata: " + recipes.size());
+        System.out.println(">>> Ukupno pronađenih recepata: " + recipes.size());
+        recipes.forEach(r -> System.out.println(">>> Recept: " + r.getTitle()));
+        return recipes.stream()
                 .map(this::toDto)
                 .toList();
     }
+
 
     @Override
     public RecipeDto getById(Long id) {
@@ -70,7 +75,7 @@ public class RecipeServiceImpl implements RecipeService {
         dto.setImage(r.getImage());
         dto.setCreatedAt(r.getCreatedAt());
         dto.setUpdatedAt(r.getUpdatedAt());
-        dto.setEnabled(r.getEnabled().equals("true"));
+        dto.setEnabled(Boolean.parseBoolean(r.getEnabled()));
         return dto;
     }
 

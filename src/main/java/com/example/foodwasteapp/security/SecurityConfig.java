@@ -84,7 +84,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // OVDJE stavi svoj TOCAN port
-        config.setAllowedOrigins(List.of("http://localhost:5176"));
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
 
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

@@ -19,7 +19,7 @@ public class JwtService {
 
     private final Key signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
 
-    public static final long ACCESS_MS  = 5 * 60 * 1000;
+    public static final long ACCESS_MS  = 5 * 1000;
     public static final long REFRESH_MS = 7L * 24 * 60 * 60 * 1000;
 
 

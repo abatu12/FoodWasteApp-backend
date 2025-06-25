@@ -59,3 +59,6 @@ Thumbs.db
 
 ### H2 database ###
 /h2-console-data.mv.db
+# H2 lokalna baza
+/data/*.mv.db
+/data/*.trace.db

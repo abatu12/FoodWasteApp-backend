@@ -1,5 +1,6 @@
 package com.example.foodwasteapp.controller;
 
+import com.example.foodwasteapp.dbmodel.User;
 import com.example.foodwasteapp.dto.RecipeDto;
 import com.example.foodwasteapp.service.RecipeService;
 import org.springframework.web.bind.annotation.*;
