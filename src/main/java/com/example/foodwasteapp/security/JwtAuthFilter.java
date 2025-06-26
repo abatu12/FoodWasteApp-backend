@@ -27,13 +27,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+    public boolean shouldNotFilter(HttpServletRequest request) {
         // Ignoriraj sve /api/auth/** rute
         return request.getServletPath().startsWith("/api/auth");
     }
 
     @Override
-    protected void doFilterInternal(
+    public void doFilterInternal(
             HttpServletRequest req,
             HttpServletResponse res,
             FilterChain chain

@@ -2,6 +2,7 @@ package com.example.foodwasteapp.controller;
 
 import com.example.foodwasteapp.dto.ListingDto;
 import com.example.foodwasteapp.service.ListingService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,8 +40,14 @@ public class ListingController {
         return listingService.update(id, dto);
     }
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     public void deleteListing(@PathVariable Long id) {
         listingService.delete(id);
+    }*/
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteListing(@PathVariable Long id) {
+        listingService.delete(id);
+        return ResponseEntity.noContent().build();  // vraća HTTP 204
     }
 }
